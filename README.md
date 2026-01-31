@@ -2,10 +2,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![GitHub Stars](https://img.shields.io/github/stars/sreekar-gajula/tinyllm-auto?style=social)](https://github.com/sreekar-gajula/tinyllm-auto/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/sreekar-gajula/tinyllm-auto?style=social)](https://github.com/sreekar-gajula/tinyllm-auto/network/members)
-[![GitHub Issues](https://img.shields.io/github/issues/sreekar-gajula/tinyllm-auto)](https://github.com/sreekar-gajula/tinyllm-auto/issues)
-[![CI](https://github.com/sreekar-gajula/tinyllm-auto/workflows/CI/badge.svg)](https://github.com/sreekar-gajula/tinyllm-auto/actions)
+[![GitHub Stars](https://img.shields.io/github/stars/sreekarvamsi/tinyllm-auto?style=social)](https://github.com/sreekarvamsi/tinyllm-auto/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/sreekarvamsi/tinyllm-auto?style=social)](https://github.com/sreekarvamsi/tinyllm-auto/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/sreekarvamsi/tinyllm-auto)](https://github.com/sreekarvamsi/tinyllm-auto/issues)
+[![CI](https://github.com/sreekarvamsi/tinyllm-auto/workflows/CI/badge.svg)](https://github.com/sreekarvamsi/tinyllm-auto/actions)
 
 Optimized small language model deployment on automotive edge hardware with CPU-only constraint (<8GB RAM). Demonstrates the feasibility of in-vehicle conversational AI on existing ECU platforms.
 
@@ -397,7 +397,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for de
 
 ```bash
 # Clone and install in development mode
-git clone https://github.com/sreekar-gajula/tinyllm-auto.git
+git clone https://github.com/sreekarvamsi/tinyllm-auto.git
 cd tinyllm-auto
 pip install -e ".[dev]"
 
@@ -422,9 +422,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-**Sreekar Gajula** - [GitHub](https://github.com/sreekar-gajula)
+**Sreekar Gajula** - [GitHub](https://github.com/sreekarvamsi)
 
-Project Link: [https://github.com/sreekar-gajula/tinyllm-auto](https://github.com/sreekar-gajula/tinyllm-auto)
+Project Link: [https://github.com/sreekarvamsi/tinyllm-auto](https://github.com/sreekarvamsi/tinyllm-auto)
 
 ---
 
