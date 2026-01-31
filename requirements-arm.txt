@@ -1,0 +1,28 @@
+# Requirements for ARM Architecture (Raspberry Pi 4)
+
+# Core Dependencies - ARM compatible versions
+llama-cpp-python>=0.2.0
+numpy>=1.24.0
+requests>=2.31.0
+
+# Voice Interface - Lightweight versions for ARM
+openai-whisper>=20231117
+# Note: Use TTS lite version for ARM
+sounddevice>=0.4.6
+soundfile>=0.12.1
+
+# Demo & UI - Lighter versions
+gradio>=4.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+
+# ARM-Specific Optimizations
+# Install llama-cpp-python with ARM optimizations:
+# CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" pip install llama-cpp-python
+
+# For Raspberry Pi 4 setup:
+# 1. sudo apt-get update
+# 2. sudo apt-get install -y python3-dev libopenblas-dev portaudio19-dev
+# 3. pip install -r requirements-arm.txt

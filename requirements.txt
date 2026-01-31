@@ -1,0 +1,25 @@
+# Core Dependencies
+llama-cpp-python>=0.2.0
+numpy>=1.24.0
+requests>=2.31.0
+
+# Voice Interface
+openai-whisper>=20231117
+TTS>=0.22.0
+sounddevice>=0.4.6
+soundfile>=0.12.1
+
+# Demo & UI
+gradio>=4.0.0
+matplotlib>=3.7.0
+
+# Development
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.1.0
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+pydantic>=2.0.0
