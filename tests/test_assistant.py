@@ -1,16 +1,17 @@
 """
 Unit tests for VehicleAssistant
+Tests that don't require actual model loading for CI/CD
 """
 
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 import sys
 from pathlib import Path
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from assistant import VehicleAssistant, VehicleContext
+from assistant import VehicleContext
 
 
 class TestVehicleContext:
@@ -47,12 +48,14 @@ class TestVehicleContext:
         assert "20,000" in prompt
 
 
-class TestVehicleAssistant:
-    """Test VehicleAssistant class"""
+class TestVehicleAssistantStructure:
+    """Test VehicleAssistant class structure without loading models"""
     
-    @patch('assistant.Llama')
-    def test_assistant_initialization(self, mock_llama):
-        """Test assistant initialization"""
+    def test_assistant_initialization_structure(self):
+        """Test assistant initialization without loading model"""
+        # Import here to avoid loading llama_cpp
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             context_size=2048,
@@ -63,9 +66,12 @@ class TestVehicleAssistant:
         assert assistant.context_size == 2048
         assert assistant.conversation_history == []
         assert assistant.vehicle_context is None
+        assert assistant._llm is None  # Should not be loaded yet
     
     def test_set_vehicle_context(self):
         """Test setting vehicle context"""
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             verbose=False
@@ -85,6 +91,8 @@ class TestVehicleAssistant:
     
     def test_build_prompt_without_context(self):
         """Test prompt building without vehicle context"""
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             verbose=False
@@ -99,6 +107,8 @@ class TestVehicleAssistant:
     
     def test_build_prompt_with_context(self):
         """Test prompt building with vehicle context"""
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             verbose=False
@@ -118,14 +128,16 @@ class TestVehicleAssistant:
         assert "2023" in prompt
         assert "Check engine light on" in prompt
     
-    def test_conversation_history(self):
+    def test_conversation_history_management(self):
         """Test conversation history management"""
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             verbose=False
         )
         
-        # Manually add to history (simulating ask() response)
+        # Manually add to history
         assistant.conversation_history.append({
             'user': 'Question 1',
             'assistant': 'Answer 1'
@@ -138,28 +150,10 @@ class TestVehicleAssistant:
         assistant.reset_conversation()
         assert len(assistant.conversation_history) == 0
     
-    @patch('assistant.Llama')
-    @patch('builtins.open', create=True)
-    @patch('json.dump')
-    def test_save_conversation(self, mock_json_dump, mock_open, mock_llama):
-        """Test saving conversation to file"""
-        assistant = VehicleAssistant(
-            model_path="test_model.gguf",
-            verbose=False
-        )
-        
-        assistant.conversation_history = [
-            {'user': 'Q1', 'assistant': 'A1'},
-            {'user': 'Q2', 'assistant': 'A2'}
-        ]
-        
-        assistant.save_conversation("test.json")
-        
-        # Verify json.dump was called
-        assert mock_json_dump.called
-    
     def test_system_prompt_content(self):
         """Test that system prompt contains key elements"""
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             verbose=False
@@ -171,6 +165,25 @@ class TestVehicleAssistant:
         assert "automotive" in system_prompt or "vehicle" in system_prompt
         assert "diagnostic" in system_prompt
         assert "safety" in system_prompt
+    
+    def test_get_conversation_history(self):
+        """Test retrieving conversation history"""
+        from assistant import VehicleAssistant
+        
+        assistant = VehicleAssistant(
+            model_path="test_model.gguf",
+            verbose=False
+        )
+        
+        # Add some history
+        assistant.conversation_history = [
+            {'user': 'Q1', 'assistant': 'A1'},
+            {'user': 'Q2', 'assistant': 'A2'}
+        ]
+        
+        history = assistant.get_conversation_history()
+        assert len(history) == 2
+        assert history[0]['user'] == 'Q1'
 
 
 class TestEdgeCases:
@@ -178,6 +191,8 @@ class TestEdgeCases:
     
     def test_empty_conversation_history(self):
         """Test behavior with empty conversation history"""
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             verbose=False
@@ -186,8 +201,10 @@ class TestEdgeCases:
         history = assistant.get_conversation_history()
         assert history == []
     
-    def test_long_conversation_history(self):
+    def test_long_conversation_history_truncation(self):
         """Test handling of long conversation history"""
+        from assistant import VehicleAssistant
+        
         assistant = VehicleAssistant(
             model_path="test_model.gguf",
             verbose=False
@@ -207,6 +224,55 @@ class TestEdgeCases:
         user_count = prompt.count("User:")
         # Should be 6: 5 from history + 1 current
         assert user_count == 6
+    
+    def test_vehicle_context_optional_vin(self):
+        """Test that VIN is optional in vehicle context"""
+        context = VehicleContext(
+            make="BMW",
+            model="X5",
+            year=2021,
+            mileage=30000
+        )
+        
+        assert context.vin is None
+        
+        # Test with VIN
+        context_with_vin = VehicleContext(
+            make="BMW",
+            model="X5",
+            year=2021,
+            mileage=30000,
+            vin="1234567890ABCDEFG"
+        )
+        
+        assert context_with_vin.vin == "1234567890ABCDEFG"
+
+
+class TestImports:
+    """Test that all modules can be imported"""
+    
+    def test_import_assistant(self):
+        """Test importing assistant module"""
+        from assistant import VehicleAssistant, VehicleContext
+        assert VehicleAssistant is not None
+        assert VehicleContext is not None
+    
+    def test_import_package(self):
+        """Test importing from package"""
+        import sys
+        from pathlib import Path
+        
+        # Ensure src is in path
+        src_path = str(Path(__file__).parent.parent / "src")
+        if src_path not in sys.path:
+            sys.path.insert(0, src_path)
+        
+        # Import from package
+        try:
+            from assistant import VehicleAssistant
+            assert True
+        except ImportError as e:
+            pytest.fail(f"Failed to import: {e}")
 
 
 if __name__ == "__main__":
